@@ -1,3 +1,4 @@
+import dj_database_url
 import os
 from dotenv import load_dotenv, find_dotenv
 
@@ -84,7 +85,12 @@ DATABASES = {
         'OPTIONS': {
             'client_encoding': 'UTF8',
         },
-    }
+    },
+
+    "production": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+    )
 }
 
 # Password validation
