@@ -75,19 +75,19 @@ WSGI_APPLICATION = "django_snippets.wsgi.application"
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DB_DATABASE"),
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'PORT': os.environ.get("DB_PORT"),
-        'HOST': os.environ.get('DB_HOST'),
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
-    },
+    # "default": {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': os.environ.get("DB_DATABASE"),
+    #     'USER': os.environ.get("DB_USER"),
+    #     'PASSWORD': os.environ.get("DB_PASSWORD"),
+    #     'PORT': os.environ.get("DB_PORT"),
+    #     'HOST': os.environ.get('DB_HOST'),
+    #     'OPTIONS': {
+    #         'client_encoding': 'UTF8',
+    #     },
+    # },
 
-    "production": dj_database_url.config(
+    "default": dj_database_url.config(
         default=os.environ.get("DATABASE_URL"),
         conn_max_age=600,
     )
@@ -114,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = "es-en"
+LANGUAGE_CODE = "es"
 
 TIME_ZONE = "America/Argentina/Buenos_Aires"
 

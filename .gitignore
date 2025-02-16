@@ -146,7 +146,3 @@ GitHub.sublime-settings
 # export cases
 /public
 
-# migrations
-# migrations/
-
-# .gitlab-ci.yml
