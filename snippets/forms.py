@@ -47,7 +47,7 @@ class AdminUserCreate(ModelForm):
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
         pwd = password1.lower()
-        reg = "^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,20}$"
+        reg = r"^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,20}$"
         # compiling regex
         pat = re.compile(reg)
         # searching regex
@@ -73,13 +73,14 @@ class AdminUserCreate(ModelForm):
 
 class UserAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
-        label="",
+        label="Email",
         widget=forms.EmailInput(
             attrs={"class": "form-control tall-form-field mb-4"}
         ),
     )
+
     password = forms.CharField(
-        label="",
+        label="Password",
         widget=forms.PasswordInput(
             attrs={"class": "form-control tall-form-field mb-4"}
         ),
@@ -90,18 +91,24 @@ class UserAuthenticationForm(AuthenticationForm):
         fields = ("username", "password")
 
 
+
 class UserRegisterForm(forms.ModelForm):
+    username = forms.CharField(
+        label="Username",
+        widget=forms.TextInput(),
+    )
+    
     email = forms.EmailField(
-        label="",
+        label="Email",
         widget=forms.TextInput(),
     )
 
     password1 = forms.CharField(
-        label="",
+        label="Password",
         widget=forms.PasswordInput(),
     )
     password2 = forms.CharField(
-        label="",
+        label="Repeat Password",
         widget=forms.PasswordInput(),
     )
 

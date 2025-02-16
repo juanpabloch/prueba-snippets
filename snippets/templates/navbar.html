@@ -7,7 +7,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto d-flex justify-content-between w-100">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Snipets</a>
@@ -16,15 +16,17 @@
                     <a class="dropdown-item" href="{% url 'index' %}">Listado de Snippets</a>
                 </div>
             </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout" tabindex="-1">Salir</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/login" tabindex="-1">Ingresar</a>
-                </li>
-            {% endif %}
+            <div class="auth">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}" tabindex="-1">Salir</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}" tabindex="-1">Ingresar</a>
+                    </li>
+                {% endif %}
+            </div>
         </ul>
     </div>
 </nav>

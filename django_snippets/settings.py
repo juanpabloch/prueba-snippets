@@ -28,7 +28,7 @@ AUTH_USER_MODEL = 'snippets.User'
 # Application definition
 
 INSTALLED_APPS = [
-    "snippets.apps.SnippetsConfig",
+    # "snippets.apps.SnippetsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "crispy_forms",
+    "snippets",
 ]
 
 MIDDLEWARE = [
@@ -122,7 +123,9 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
+STATIC_ROOT = os.path.join(PROJECT_DIR, "staticfiles")
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
@@ -132,14 +135,18 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.environ.get("EMAIL_HOST")
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = os.environ.get("EMAIL_PORT")
-EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
+# EMAIL_HOST = os.environ.get("EMAIL_HOST")
+# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+# EMAIL_PORT = os.environ.get("EMAIL_PORT")
+# EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
 CELERY_BROKER_URL = os.environ.get("REDIS_URL")
 CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
+
+LOGIN_URL = "/login/"
+
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY")

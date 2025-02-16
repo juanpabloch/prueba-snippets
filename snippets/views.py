@@ -1,18 +1,22 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views import View
 
-from .forms import UserAuthenticationForm, SnippetForm
+from .models import Snippet, User, Language
+from .forms import UserAuthenticationForm, SnippetForm, UserRegisterForm
+from .utils import send_email, get_snippet_format
 
 
 class Login(View):
     def get(self, request, *args, **kwargs):
         form = UserAuthenticationForm()
         context = {"form": form}
-        return render(request, "snippets/login.html", context)
+        return render(request, "login.html", context)
 
     def post(self, request, *args, **kwargs):
-        form = UserAuthenticationForm(request.POST)
+        form = UserAuthenticationForm(data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
@@ -22,10 +26,9 @@ class Login(View):
                 return redirect("index")
             else:
                 form.add_error(None, "Usuario o contraseña incorrectos")
-                return render(request, "snippets/login.html", {"form": form})
+                return render(request, "login.html", {"form": form})
         else:
-            form.add_error(None, "Error al intentar ingresar")
-            return render(request, "snippets/login.html", {"form": form})
+            return render(request, "login.html", {"form": form})
         
 
 class Logout(View):
@@ -34,65 +37,174 @@ class Logout(View):
         return redirect("index")
 
 
+class UserRegisterView(View):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("index")
+        
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        form = UserRegisterForm()
+        context = {"form": form}
+        return render(request, "register.html", context)
+
+    def post(self, request, *args, **kwargs):
+        form = UserRegisterForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
+            password = form.cleaned_data.get("password1")
+            
+            user = User.objects.create_user(username, email, password)
+            print("USER: ", user)
+            return redirect("login")
+        else:
+            print("ERROR: ", form.errors)
+            return render(request, "register.html", {"form": form})
+
+
 class Index(View):
     def get(self, request, *args, **kwargs):
-        # TODO: Fetch and display all public snippets
-        return render(request, "index.html", {"snippets": []})
+        snippets = Snippet.objects.filter(public=True)
+
+        context = {"snippets": snippets}
+        return render(request, "index.html", context)
 
 
-#    TODO: Implement this class to handle snippet creation, only for authenticated users.
+
+class SnippetDetails(View):
+    def get(self, request, *args, **kwargs):
+        snippet_id = self.kwargs["id"]
+        snippet = Snippet.objects.filter(id=snippet_id)
+        
+        if not snippet.exists():
+            return redirect("index")
+
+        snippet = snippet.first()
+
+        if request.user != snippet.user and not snippet.public:
+            return redirect("index")
+
+        result = get_snippet_format(snippet.snippet, snippet.language.slug)
+        
+        context = {
+            "snippet": snippet,
+            "result": result
+        }
+        return render(request, "snippets/snippet.html", context)
+
+
+
 class SnippetAdd(View):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
     def get(self, request, *args, **kwargs):
         form = SnippetForm()
-
         context = {
             "action": "Cargar",
             "form": form
         }
         return render(request, "snippets/snippet_add.html", context)
+    
+    def post(self, request, *args, **kwargs):
+        form = SnippetForm(data=request.POST)
+        if form.is_valid():
+            snippet = form.save(commit=False)
+            snippet.user = request.user
+            snippet.save()
+
+            send_email(
+                subject=snippet.name,
+                recipient_list=[snippet.user.email],
+                template='email/snippet.html',
+                context={
+                    "user": snippet.user,
+                    "snippet": snippet,
+                }
+            )
+            return redirect("user_snippets", username=snippet.user.username)
+        else:
+            return render(request, "snippets/snippet_add.html", {"form": form})
 
 
-#    TODO: Implement this class to handle snippet editing. Allow editing only for the owner.
 class SnippetEdit(View):
-    def get(self, request, *args, **kwargs):
-        form = SnippetForm()
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        snippet = get_object_or_404(Snippet, id=self.kwargs["id"])
+        if not snippet.user == request.user:
+            return redirect("index")
 
+        self.snippet = snippet
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        form = SnippetForm(instance=self.snippet)
+        
         context = {
             "action": "Editar",
             "form": form
         }
         return render(request, "snippets/snippet_add.html", context)
 
+    def post(self, request, *args, **kwargs):
+        form = SnippetForm(data=request.POST, instance=self.snippet)
+        if form.is_valid():
+            snippet = form.save(commit=False)
+            snippet.save()
 
-#    TODO: Implement this class to handle snippet deletion. Allow deletion only for the owner.
+            return redirect("snippet" , id=snippet.id)
+        else:
+            return render(request, "snippets/snippet_add.html", {"form": form})
+        
+
 class SnippetDelete(View):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        snippet = get_object_or_404(Snippet, id=self.kwargs["id"])
+        if not snippet.user == request.user:
+            return redirect("index")
+
+        self.snippet = snippet
+        return super().dispatch(request, *args, **kwargs)
+    
     def get(self, request, *args, **kwargs):
-        pass
-
-
-class SnippetDetails(View):
-    def get(self, request, *args, **kwargs):
-        snippet_id = self.kwargs["id"]
-        # TODO: Implement logic to get snippet by ID
-        # snippet = Snippet.objects.get(id=snippet_id)
-        # Add conditions for private snippets
-
-        # context = {"snippet": snippet}
-        return render(request, "snippets/snippet.html")
+        try:
+            self.snippet.delete()
+            if request.GET.get("from") == "user":
+                return redirect("user_snippets", username=self.snippet.user.username)
+            
+            return redirect("index")
+        except Exception as e:
+            print(e)
+            return redirect("index")
 
 
 class UserSnippets(View):
     def get(self, request, *args, **kwargs):
         username = self.kwargs["username"]
-        # TODO: Fetch user snippets based on username and public/private logic
-        # snippets = Snippet.objects.filter(...)
+        user = get_object_or_404(User, username=username)
 
-        # context = {"snippetUsername": username, "snippets": snippets}
-        return render(request, "snippets/user_snippets.html")
+        snippets = Snippet.objects.filter(user=user)
+        
+        if not request.user == user:
+            snippets = snippets.filter(public=True)
+        
+        context = {
+            "snippetUsername": username, 
+            "snippets": snippets
+        }
+        return render(request, "snippets/user_snippets.html", context)
 
 
 class SnippetsByLanguage(View):
     def get(self, request, *args, **kwargs):
-        language = self.kwargs["language"]
-        # TODO: Fetch snippets based on language
-        return render(request, "index.html", {"snippets": []})
+        lang = self.kwargs["language"]
+        language = get_object_or_404(Language, slug=lang)
+        snippets = Snippet.objects.filter(language=language, public=True)
+        context = {
+            "snippets": snippets
+        }
+        return render(request, "index.html", context)

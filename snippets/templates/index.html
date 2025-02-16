@@ -17,11 +17,13 @@
                         <a href="{% url 'snippet'  i.id %}" class="btn btn-primary">Ver</a>
                         {% if request.user.username == i.user.username %}
                             <a href="{% url 'snippet_edit' id=i.id %}" class="btn btn-info">Editar</a>
-                            <a href="{% url 'snippet_delete' id=i.id %}" class="btn btn-danger">Eliminar</a>
+                            <a href="{% url 'snippet_delete' id=i.id %}?from=index" class="btn btn-danger">Eliminar</a>
                         {% endif %}
                     </div>
                 </div>
                 <br>
+            {% empty %}
+                <h3>No hay snippets disponibles</h3>
             {% endfor %}
             <!-- FIN SNIPPET -->
         </div>

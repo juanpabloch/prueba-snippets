@@ -1,18 +1,20 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from datetime import datetime
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password):
+    def create_user(self, username, email, password):
         user = self.model(
             email=self.normalize_email(email),
             password=password,
         )
         user.set_password(password)
+        user.username = username
+        user.is_active = 1
         user.save()
         return user
 
@@ -28,14 +30,13 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     email = models.CharField(max_length=100, unique=True)
     activated = models.IntegerField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True, auto_now=True)
-    updated_at = models.DateTimeField(auto_now_add=True, auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -80,3 +81,9 @@ class Snippet(models.Model):
     snippet = models.TextField()
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
     public = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["-created"]
