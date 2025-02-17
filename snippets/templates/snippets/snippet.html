@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
     <div class="row justify-content-md-center">
         <div class="col-md-8">
@@ -23,8 +25,12 @@
                         {% if request.user.username == snippet.user.username %}
                             <hr>
                             <br>
-                            <a href="{% url 'snippet_edit' id=snippet.id %}" class="btn btn-info mr-2">Editar</a>
-                            <a href="{% url 'snippet_delete' id=snippet.id %}" class="btn btn-danger">Eliminar</a>
+                            <a href="{% url 'snippet_edit' id=snippet.id %}" class="btn btn-info mr-2">
+                                <img src="{% static 'img/edit-icon.svg' %}" alt="editar-btn" class="icon-edit">
+                            </a>
+                            <a href="{% url 'snippet_delete' id=snippet.id %}?from=index" class="btn btn-danger">
+                                <img src="{% static 'img/trash-icon.svg' %}" alt="delete-btn" class="icon-delete">
+                            </a>
                         {% endif %}
                     <div class="actions-btn">
                 </div>

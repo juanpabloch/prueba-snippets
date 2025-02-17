@@ -12,6 +12,29 @@ body{
     }
 }
 
+*:focus {
+    outline: none !important;
+}
+
+*:active{
+    outline: none !important;
+}
+
+button[type="submit"]{
+    font-weight: 600;
+    padding: 6px 15px;
+    letter-spacing: 1px;
+    border: 2px solid #191715;
+    border-radius: 2rem;
+    color: #F5F5F5;
+    background-color: #191715;
+    &:hover{
+        background-color: #F5F5F5;
+        color: #191715;
+        border: 2px solid #191715;
+    }
+}
+
 .navbar{
     background: #191715;
 
@@ -27,6 +50,10 @@ body{
             color: #262626;
         }
     }
+
+    .navbar-brand{
+        margin-right: 4rem;
+    }
 }
 
 
@@ -36,7 +63,7 @@ body{
     .card{
         background: #ffffff;
         border: none;
-        box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.173);
+        box-shadow: 2px 2px 8px -2px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
 
         .card-body{
@@ -55,31 +82,34 @@ body{
                     font-weight: 600;
                     padding: 6px 15px;
                     letter-spacing: 1px;
-                    border: none;
-                }
-
-                .see-snippet-btn{
-                    background-color: #0067b8;
-                    color: #ffffff;
-                    border: 2px solid #0067b8;
+                    border: 2px solid #191715;
+                    border-radius: 2rem;
+                    color: #F5F5F5;
+                    background-color: #191715;
+                    
                     &:hover{
-                        background-color: #005DA5;
-                        border: 2px solid #005DA5;
+                        background-color: #F5F5F5;
+                        color: #191715;
                     }
                 }
 
-                .btn-info{
-                    background-color: #ffffff;
-                    color: #0067b8;
-                    border: 2px solid #0067b8;
+                .btn-info, .btn-danger{
+                    background-color: #F5F5F5;
+                    border: 2px solid #191715;
+                    width: 42px;
+                    padding: 7px 10px;
     
                     &:hover{
-                        background-color: #0068b81c;
-                    }
-                }
+                        background-color: #191715;
 
-                .btn-danger{
-                    border: 2px solid #dc3545;
+                        img{
+                            filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(49deg) brightness(103%) contrast(103%);
+                        }
+                    }
+
+                    img{
+                        width: 20px;
+                    }
                 }
 
             }
