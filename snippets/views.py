@@ -1,12 +1,17 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 
+import json
+import redis
+
 from .models import Snippet, User, Language
 from .forms import UserAuthenticationForm, SnippetForm, UserRegisterForm
 from .utils import send_email, get_snippet_format
+from django.conf import settings
 
 
 class Login(View):
@@ -110,24 +115,29 @@ class SnippetAdd(View):
         return render(request, "snippets/snippet_add.html", context)
     
     def post(self, request, *args, **kwargs):
-        form = SnippetForm(data=request.POST)
-        if form.is_valid():
-            snippet = form.save(commit=False)
-            snippet.user = request.user
-            snippet.save()
+        try:
+            form = SnippetForm(data=request.POST)
+            if form.is_valid():
+                snippet = form.save(commit=False)
+                snippet.user = request.user
+                snippet.save()
 
-            send_email(
-                subject=snippet.name,
-                recipient_list=[snippet.user.email],
-                template='email/snippet.html',
-                context={
-                    "user": snippet.user,
-                    "snippet": snippet,
+                # Send email
+                data = {
+                    "snippet_name": snippet.name,
+                    "snippet_description": snippet.description,
+                    "sent_to": snippet.user.email,
                 }
-            )
-            return redirect("user_snippets", username=snippet.user.username)
-        else:
-            return render(request, "snippets/snippet_add.html", {"form": form})
+                
+                redis_client = redis.from_url(settings.CACHES["default"]["LOCATION"])
+                redis_client.rpush("snippets_list", json.dumps(data))
+                
+                return redirect("user_snippets", username=snippet.user.username)
+            else:
+                return render(request, "snippets/snippet_add.html", {"form": form})
+        except Exception as e:
+            print(e)
+            return redirect("index")
 
 
 class SnippetEdit(View):
@@ -205,6 +215,7 @@ class SnippetsByLanguage(View):
         language = get_object_or_404(Language, slug=lang)
         snippets = Snippet.objects.filter(language=language, public=True)
         context = {
-            "snippets": snippets
+            "snippets": snippets,
+            "language_header": language
         }
         return render(request, "index.html", context)

@@ -25,7 +25,6 @@ def send_email(subject: str, recipient_list: list[str], template: str, context: 
 
         return response
     except Exception as e:
-        print(e)
         return  e
 
 

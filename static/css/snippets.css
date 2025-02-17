@@ -1,0 +1,92 @@
+body{
+    background: rgb(234,232,228);
+    background: linear-gradient(180deg, rgba(234,232,228,1) 0%, rgba(255,255,255,1) 77%);
+    color: #262626;
+    min-height: 100vh;
+    font-family: "Roboto Mono", serif;
+
+    .title-page{
+        font-weight: 800;
+        letter-spacing: 1px;
+        font-size: 3rem;
+    }
+}
+
+.navbar{
+    background: #191715;
+
+    a{
+        color: #EAE8E4;
+        font-weight: 400;
+    }
+
+    .dropdown-menu{
+        background-color: #EAE8E4;
+        
+        a{
+            color: #262626;
+        }
+    }
+}
+
+
+/* Tarjetas */
+.container{
+    
+    .card{
+        background: #ffffff;
+        border: none;
+        box-shadow: 2px 2px 8px -1px rgba(0, 0, 0, 0.173);
+        border-radius: 10px;
+
+        .card-body{
+            h6{
+                font-weight: 400;
+                font-size: 0.8rem;
+                color: #7d858db9 !important;
+            }
+
+            .actions-btn{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .btn{
+                    font-weight: 600;
+                    padding: 6px 15px;
+                    letter-spacing: 1px;
+                    border: none;
+                }
+
+                .see-snippet-btn{
+                    background-color: #0067b8;
+                    color: #ffffff;
+                    border: 2px solid #0067b8;
+                    &:hover{
+                        background-color: #005DA5;
+                        border: 2px solid #005DA5;
+                    }
+                }
+
+                .btn-info{
+                    background-color: #ffffff;
+                    color: #0067b8;
+                    border: 2px solid #0067b8;
+    
+                    &:hover{
+                        background-color: #0068b81c;
+                    }
+                }
+
+                .btn-danger{
+                    border: 2px solid #dc3545;
+                }
+
+            }
+        }
+
+        .highlight{
+            font-size: 1.3rem;
+        }
+    }
+}

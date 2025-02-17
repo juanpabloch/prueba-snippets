@@ -3,7 +3,7 @@
     <div class="row justify-content-md-center">
         <div class="col-md-8">
             <br>
-            <div class="card">
+            <div class="card my-5">
                 <h5 class="card-header">{{ snippet.name }} <a
                         href="{% url 'user_snippets' username=snippet.user.username %}"
                         class="float-right"><small>{{ snippet.user.username }}</small></a>
@@ -19,12 +19,14 @@
                         {{ result|safe }}
                         <!-- Código del Snippet -->
                     </div>
-                    {% if request.user.username == snippet.user.username %}
-                        <hr>
-                        <br>
-                        <a href="{% url 'snippet_edit' id=snippet.id %}" class="btn btn-info">Editar</a>
-                        <a href="{% url 'snippet_delete' id=snippet.id %}" class="btn btn-danger">Eliminar</a>
-                    {% endif %}
+                    <div class="actions-btn">
+                        {% if request.user.username == snippet.user.username %}
+                            <hr>
+                            <br>
+                            <a href="{% url 'snippet_edit' id=snippet.id %}" class="btn btn-info mr-2">Editar</a>
+                            <a href="{% url 'snippet_delete' id=snippet.id %}" class="btn btn-danger">Eliminar</a>
+                        {% endif %}
+                    <div class="actions-btn">
                 </div>
             </div>
         </div>

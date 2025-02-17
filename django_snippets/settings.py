@@ -49,6 +49,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "snippets.middleware.SendEmailMiddleware",
 ]
 
 ROOT_URLCONF = "django_snippets.urls"
@@ -75,22 +76,22 @@ WSGI_APPLICATION = "django_snippets.wsgi.application"
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    # "default": {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': os.environ.get("DB_DATABASE"),
-    #     'USER': os.environ.get("DB_USER"),
-    #     'PASSWORD': os.environ.get("DB_PASSWORD"),
-    #     'PORT': os.environ.get("DB_PORT"),
-    #     'HOST': os.environ.get('DB_HOST'),
-    #     'OPTIONS': {
-    #         'client_encoding': 'UTF8',
-    #     },
-    # },
-
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-    )
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("DB_DATABASE"),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'PORT': os.environ.get("DB_PORT"),
+        'HOST': os.environ.get('DB_HOST'),
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
+    },
+    
+    # "default": dj_database_url.config(
+    #     default=os.environ.get("DATABASE_URL"),
+    #     conn_max_age=600,
+    # )
 }
 
 # Password validation
@@ -129,6 +130,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [STATIC_DIR]
 STATIC_ROOT = os.path.join(PROJECT_DIR, "staticfiles")
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -147,12 +150,19 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_PORT = os.environ.get("EMAIL_PORT")
 # EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
-CELERY_BROKER_URL = os.environ.get("REDIS_URL")
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
-CELERY_ACCEPT_CONTENT = ["application/json"]
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TASK_SERIALIZER = "json"
+# CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+# CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
+# CELERY_ACCEPT_CONTENT = ["application/json"]
+# CELERY_RESULT_SERIALIZER = "json"
+# CELERY_TASK_SERIALIZER = "json"
 
 LOGIN_URL = "/login/"
 
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.environ.get("REDIS_URL"),
+    }
+}
