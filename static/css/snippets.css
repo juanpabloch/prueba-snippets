@@ -135,6 +135,11 @@ button[type="submit"]{
 
         .highlight{
             font-size: 1.3rem;
+            margin-bottom: 10px;
+
+            pre{
+                padding-bottom: 25px;
+            }
         }
     }
 }
