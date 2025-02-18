@@ -76,22 +76,22 @@ WSGI_APPLICATION = "django_snippets.wsgi.application"
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DB_DATABASE"),
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'PORT': os.environ.get("DB_PORT"),
-        'HOST': os.environ.get('DB_HOST'),
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
-    },
+    # "default": {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': os.environ.get("DB_DATABASE"),
+    #     'USER': os.environ.get("DB_USER"),
+    #     'PASSWORD': os.environ.get("DB_PASSWORD"),
+    #     'PORT': os.environ.get("DB_PORT"),
+    #     'HOST': os.environ.get('DB_HOST'),
+    #     'OPTIONS': {
+    #         'client_encoding': 'UTF8',
+    #     },
+    # },
     
-    # "default": dj_database_url.config(
-    #     default=os.environ.get("DATABASE_URL"),
-    #     conn_max_age=600,
-    # )
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+    )
 }
 
 # Password validation

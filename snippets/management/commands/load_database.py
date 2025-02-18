@@ -8,6 +8,7 @@ class Command(BaseCommand):
     help = 'Upload Languages to database from json file'
 
     def handle(self, *args, **kwargs):
+        self.stdout.write(self.style.HTTP_INFO (f'Executing load_database command'))
         with open("dump_data.json", "r") as file:
             data = json.load(file)
             for language in data:
