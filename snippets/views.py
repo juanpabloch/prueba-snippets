@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
@@ -138,12 +139,12 @@ class SnippetAdd(View):
                 
                 redis_client = redis.from_url(settings.CACHES["default"]["LOCATION"])
                 redis_client.rpush("snippets_list", json.dumps(data))
-                
+
+                messages.success(request, "Snippet creado exitosamente")
                 return redirect("user_snippets", username=snippet.user.username)
             else:
                 return render(request, "snippets/snippet_add.html", {"form": form})
         except Exception as e:
-            print(e)
             return redirect("index")
 
 
@@ -171,7 +172,6 @@ class SnippetEdit(View):
         if form.is_valid():
             snippet = form.save(commit=False)
             snippet.save()
-
             return redirect("snippet" , id=snippet.id)
         else:
             return render(request, "snippets/snippet_add.html", {"form": form})
@@ -190,6 +190,7 @@ class SnippetDelete(View):
     def get(self, request, *args, **kwargs):
         try:
             self.snippet.delete()
+            messages.success(request, "Snippet borrado exitosamente")
             if request.GET.get("from") == "user":
                 return redirect("user_snippets", username=self.snippet.user.username)
             elif request.GET.get("from") == "language":
@@ -197,7 +198,7 @@ class SnippetDelete(View):
             
             return redirect("index")
         except Exception as e:
-            print(e)
+            messages.error(request, "Error al borrar el snippet: " + str(e))
             return redirect("index")
 
 
