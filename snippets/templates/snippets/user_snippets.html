@@ -5,6 +5,13 @@
     <div class="row justify-content-md-center">
         <div class="col-md-8">
             <h5 class="my-5 title-page">Snippets: {{ snippetUsername }}</h5>
+
+            {% if messages %}
+                {% for message in messages %}
+                    {% include "partials/messages.html" %}
+                {% endfor %}
+            {% endif %}
+
             {% for i in snippets %}
                 <!-- SNIPPET -->
                 <div class="card">
@@ -34,6 +41,9 @@
                 </div>
                 <br>
                 <!-- FIN SNIPPET -->
+            {% empty %}
+                <br>
+                <h3>No hay snippets disponibles</h3>
             {% endfor %}
         </div>
     </div>

@@ -89,3 +89,9 @@ h1{
 .back-btn{
     width: 50px;
 }
+
+@media screen and (max-width: 768px) {
+    :root{
+        font-size: 12px;
+    }
+}

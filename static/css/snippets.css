@@ -54,6 +54,14 @@ button[type="submit"]{
     .navbar-brand{
         margin-right: 4rem;
     }
+
+    .navbar-toggler{
+        background-image: url("../img/menu-icon.svg");
+        background-size: 30px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #EAE8E4;
+    }
 }
 
 
@@ -118,5 +126,11 @@ button[type="submit"]{
         .highlight{
             font-size: 1.3rem;
         }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    :root{
+        font-size: 12px;
     }
 }
