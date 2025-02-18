@@ -18,7 +18,9 @@
     <link rel="stylesheet" href="{% static 'css/snippets.css' %}">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pygments-rouge-css@0.1.0/default.css">
-    <title>Django Snippets</title>
+    <title>{% block title %}Django Snippets{% endblock title %}</title>
+
+    {% block style %}{% endblock style %}
 </head>
 <body>
     <header>

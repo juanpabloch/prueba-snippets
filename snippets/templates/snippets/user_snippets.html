@@ -24,7 +24,7 @@
                                     <a href="{% url 'snippet_edit' id=i.id %}" class="btn btn-info mr-2">
                                         <img src="{% static 'img/edit-icon.svg' %}" alt="editar-btn" class="icon-edit">
                                     </a>
-                                    <a href="{% url 'snippet_delete' id=i.id %}?from=index" class="btn btn-danger">
+                                    <a href="{% url 'snippet_delete' id=i.id %}?from=user" class="btn btn-danger">
                                         <img src="{% static 'img/trash-icon.svg' %}" alt="delete-btn" class="icon-delete">
                                     </a>
                                 {% endif %}

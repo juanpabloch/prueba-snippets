@@ -21,3 +21,6 @@ urlpatterns = [
     path("", include("snippets.urls")),
     path("admin/", admin.site.urls),
 ]
+
+handler404 = 'snippets.views.handle_not_found'
+handler500 = 'snippets.views.handle_error'

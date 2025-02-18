@@ -1,0 +1,162 @@
+[
+    {
+        "model": "snippets.language",
+        "pk": 1,
+        "fields": {
+            "name": "Python",
+            "slug": "python"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 2,
+        "fields": {
+            "name": "JavaScript",
+            "slug": "javascript"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 3,
+        "fields": {
+            "name": "Java",
+            "slug": "java"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 4,
+        "fields": {
+            "name": "C#",
+            "slug": "csharp"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 5,
+        "fields": {
+            "name": "C++",
+            "slug": "cpp"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 6,
+        "fields": {
+            "name": "PHP",
+            "slug": "php"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 7,
+        "fields": {
+            "name": "TypeScript",
+            "slug": "typescript"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 8,
+        "fields": {
+            "name": "Ruby",
+            "slug": "ruby"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 9,
+        "fields": {
+            "name": "Go",
+            "slug": "go"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 10,
+        "fields": {
+            "name": "Swift",
+            "slug": "swift"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 11,
+        "fields": {
+            "name": "Kotlin",
+            "slug": "kotlin"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 12,
+        "fields": {
+            "name": "Rust",
+            "slug": "rust"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 13,
+        "fields": {
+            "name": "Scala",
+            "slug": "scala"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 14,
+        "fields": {
+            "name": "HTML",
+            "slug": "html"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 15,
+        "fields": {
+            "name": "CSS",
+            "slug": "css"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 16,
+        "fields": {
+            "name": "Shell",
+            "slug": "shell"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 17,
+        "fields": {
+            "name": "Perl",
+            "slug": "perl"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 18,
+        "fields": {
+            "name": "SQL",
+            "slug": "sql"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 19,
+        "fields": {
+            "name": "R",
+            "slug": "r"
+        }
+    },
+    {
+        "model": "snippets.language",
+        "pk": 20,
+        "fields": {
+            "name": "Dart",
+            "slug": "dart"
+        }
+    }
+]

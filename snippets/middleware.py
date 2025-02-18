@@ -1,42 +1,51 @@
 import redis
 import json
+import threading
+import time
 from django.core.cache import cache
 from django.conf import settings
+
+from .utils import send_email
 
 
 class SendEmailMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         self.redis_client = redis.from_url(settings.CACHES["default"]["LOCATION"])
-
+        self.start_thread()
+        
     def __call__(self, request):
-        # Code to be executed for each request before
-        # the view (and later middleware) are called.
         response = self.get_response(request)
-
-        # Code to be executed for each request/response after the view is called.
-        
-        # subject = 'Snippet "' + self.snippet.name + '" created successfully'
-        print("Middleware!!!!")
-        # data_list = json.loads(cache.get_many(cache.keys("snippets_*")))
-        # keys = self.redis_client.keys("snippets_*")
-        # data_list = self.redis_client.mget(keys)
-        
-        # snippets = [json.loads(item) for item in data_list if item]
-        data_list = self.redis_client.lrange("snippets_list", 0, -1)
-        snippets = [json.loads(item) for item in data_list]
-        print("CACHE_LIST: ", snippets)
-
-        # data = json.loads(cache.get("snippets"))
-        # print("CACHE: ", data)
-        # send_email(
-            #     subject=subject,
-            #     recipient_list=[snippet.user.email],
-            #     template='email/snippet.html',
-            #     context={
-            #         "user": snippet.user,
-            #         "snippet": snippet,
-            #     }
-            # )
-
         return response
+
+    def start_thread(self):
+        self.thread = threading.Thread(target=self.redis_worker)
+        self.thread.daemon = True
+        self.thread.start()
+
+    def redis_worker(self):
+        while True:
+            try:
+                while True:
+                    task = self.redis_client.lpop('snippets_list')
+                    if not task:
+                        break
+
+                    task = json.loads(task)
+                    subject = 'Snippet "' + task["snippet_name"] + '" created successfully'
+                    send_email(
+                        subject=subject,
+                        recipient_list=[task["sent_to"]],
+                        template='email/snippet_mail.html',
+                        context={
+                            "snippet_name": task["snippet_name"],
+                            "snippet_description": task["snippet_description"],
+                            "username": task["username"],
+                        }
+                    )
+                    print("Email enviado: ", task)
+                
+            except Exception as e:
+                print("ERROR: ", e)
+
+            time.sleep(60)

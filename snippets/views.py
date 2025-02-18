@@ -10,8 +10,16 @@ import redis
 
 from .models import Snippet, User, Language
 from .forms import UserAuthenticationForm, SnippetForm, UserRegisterForm
-from .utils import send_email, get_snippet_format
+from .utils import get_snippet_format
 from django.conf import settings
+
+
+def handle_not_found(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def handle_error(request):
+    return render(request, '500.html', status=500)
 
 
 class Login(View):
@@ -62,10 +70,8 @@ class UserRegisterView(View):
             password = form.cleaned_data.get("password1")
             
             user = User.objects.create_user(username, email, password)
-            print("USER: ", user)
             return redirect("login")
         else:
-            print("ERROR: ", form.errors)
             return render(request, "register.html", {"form": form})
 
 
@@ -126,6 +132,7 @@ class SnippetAdd(View):
                 data = {
                     "snippet_name": snippet.name,
                     "snippet_description": snippet.description,
+                    "username": snippet.user.username,
                     "sent_to": snippet.user.email,
                 }
                 
@@ -185,6 +192,8 @@ class SnippetDelete(View):
             self.snippet.delete()
             if request.GET.get("from") == "user":
                 return redirect("user_snippets", username=self.snippet.user.username)
+            elif request.GET.get("from") == "language":
+                return redirect("language", language=self.snippet.language.slug)
             
             return redirect("index")
         except Exception as e:

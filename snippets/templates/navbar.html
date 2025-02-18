@@ -12,8 +12,11 @@
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Snipets</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'snippet_add' %}">Cargar Snippets</a>
                     <a class="dropdown-item" href="{% url 'index' %}">Listado de Snippets</a>
+                    {% if user.is_authenticated %}
+                        <a class="dropdown-item" href="{% url 'user_snippets' username=user.username %}">Mis Snippets</a>
+                        <a class="dropdown-item" href="{% url 'snippet_add' %}">Cargar Snippets</a>
+                    {% endif %}
                 </div>
             </li>
             <div class="auth">

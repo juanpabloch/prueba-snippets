@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Internal server error{% endblock %}
+
+{% block style %}
+    <style>
+        header{
+            display: none;
+        }
+
+        .wrap{
+            margin-top: 20%;
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+    </style>
+{% endblock style %}
+
+{% block content %}
+<main>
+    <section>
+        <div class="wrap">
+            <h1>500 - Internal Server Error</h1>
+
+            <div>Uh-oh! Something went wrong. Try refreshing the page, or contact us if the problem persists.</div>
+            <br>
+            <a href="/">Head back to the homepage.</a>
+        </div>
+    </section>
+</main>
+{% endblock %}

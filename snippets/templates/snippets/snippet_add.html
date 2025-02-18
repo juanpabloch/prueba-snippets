@@ -13,31 +13,4 @@
         </div>
     </div>
 
-    {% comment %} <script>
-
-        customElements.define("my-editor", class extends HTMLElement {
-            static get observedAttributes() {
-                return ["theme"];
-            }
-            
-            connectedCallback(script = document.createElement("SCRIPT")) {
-                script.src = `//cdnjs.cloudflare.com/ajax/libs/ace/${this.dataset.version}/ace.js`;
-                script.onload = () => {
-                    this.innerHTML = `<div id=editor_container>${myEditor.innerHTML}</div>`;
-                    this.editor = ace.edit("editor_container", {
-                        mode: "ace/mode/" + (this.dataset.mode || "javascript"),
-                    });
-                    
-                    this.setAttribute("theme", this.getAttribute("theme"));
-                }
-                
-                document.head.append(script);
-            }
-            
-            attributeChangedCallback(name, oldValue, newValue) {
-                if (this.isConnected && name == "theme") this.editor.setTheme("ace/theme/" + newValue);
-            }
-        });
- 
-    </script> {% endcomment %}
 {% endblock %}

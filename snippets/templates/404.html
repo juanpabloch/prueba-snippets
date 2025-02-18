@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Page not found{% endblock %}
+
+{% block style %}
+    <style>
+        header{
+            display: none;
+        }
+
+        .wrap{
+            margin-top: 20%;
+            text-align: center;
+        }
+        
+    </style>
+{% endblock style %}
+
+{% block content %}
+<main>
+    <section>
+        <div class="wrap">
+            <h1 >404 - Page Not Found</h1>
+
+            <div>Oops! We can't seem to find the page you're looking for.</div>
+            <br>
+            <a href="/">Head back to the homepage.</a>
+        </div>
+    </section>
+</main>
+{% endblock %}
